@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user-management/**
+        - id: auth-server
+          uri: lb://auth-server
+          predicates:
+            - Path=/oauth2/**
+        - id: article-service
+          uri: lb://article-service
+          predicates:
+            - Path=/article-management/**,/article-public/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8762/eureka
+
+logging:
+  level:
+    org.springframework.cloud.gateway.route: DEBUG
+    org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: TRACE
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG

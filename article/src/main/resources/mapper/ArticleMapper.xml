@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.junmin.mapper.ArticleMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.junmin.entity.Article">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="title" property="title"/>
+        <result column="summary" property="summary"/>
+        <result column="content" property="content"/>
+        <result column="cover_image" property="coverImage"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="status" property="status"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="like_count" property="likeCount"/>
+        <result column="is_top" property="isTop"/>
+        <result column="is_comment" property="isComment"/>
+        <result column="publish_time" property="publishTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 根据ID -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM articles WHERE id = #{id}
+    </select>
+
+    <!-- 根据用户 -->
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT * FROM articles WHERE user_id = #{userId}
+    </select>
+
+    <!-- 动态查询 -->
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT * FROM articles
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="title != null and title != ''">
+                AND title LIKE CONCAT('%', #{title}, '%')
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 插入 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO articles (
+        user_id, title, summary, content, cover_image,
+        category_id, status, is_top, is_comment, publish_time
+        ) VALUES (
+        #{userId}, #{title}, #{summary}, #{content}, #{coverImage},
+        #{categoryId}, #{status}, #{isTop}, #{isComment}, #{publishTime}
+        )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateById">
+        UPDATE articles
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="summary != null">summary = #{summary},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="coverImage != null">cover_image = #{coverImage},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteById">
+        DELETE FROM articles WHERE id = #{id}
+    </delete>
+
+</mapper>

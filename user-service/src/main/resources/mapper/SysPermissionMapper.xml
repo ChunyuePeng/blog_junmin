@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.junmin.mapper.SysPermissionMapper">
+
+    <resultMap id="permMap" type="org.example.junmin.entity.SysPermission">
+        <id column="id" property="id"/>
+        <result column="perm_name" property="permName"/>
+        <result column="perm_code" property="permCode"/>
+        <result column="type" property="type"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="path" property="path"/>
+        <result column="method" property="method"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="permMap">
+        SELECT * FROM sys_permission WHERE id = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="permMap">
+        SELECT * FROM sys_permission
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_permission(perm_name, perm_code, type, parent_id, path, method)
+        VALUES (#{permName}, #{permCode}, #{type}, #{parentId}, #{path}, #{method})
+    </insert>
+
+    <update id="update">
+        UPDATE sys_permission
+        SET perm_name = #{permName},
+        perm_code = #{permCode},
+        type = #{type},
+        parent_id = #{parentId},
+        path = #{path},
+        method = #{method}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM sys_permission WHERE id = #{id}
+    </delete>
+
+</mapper>
