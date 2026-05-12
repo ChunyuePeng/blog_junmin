@@ -57,14 +57,10 @@
             <span class="clearfix" />
           </div>
         </div>
-        <div class="content">
-          <div
-            id="content"
-            class="article-detail"
+        <div
+            class="markdown-body"
             v-html="state.articleDetail.content"
-          >
-          </div>
-        </div>
+        />
         <div class="heart">
           <el-button
             type="danger"
@@ -122,7 +118,7 @@ import {
   LikeParams,
   ArticleDetailParams,
 } from "../types/index";
-
+import "github-markdown-css/github-markdown.css";
 declare let document: Document | any;
 
 export default defineComponent({
@@ -186,8 +182,8 @@ export default defineComponent({
       // ================= Markdown 解析 =================
       const result = markdown.parse(data.content);
 
-      state.articleDetail.content = result.content || "";
-      state.articleDetail.toc = result.toc || "";
+      state.articleDetail.content = result|| "";
+      state.articleDetail.toc = data.title || "";
 
       // ================= SEO =================
       const keyword = data.keyword?.join(",") || "";
@@ -444,6 +440,11 @@ export default defineComponent({
 }
 .clearfix {
   clear: both;
+}
+
+.markdown-body {
+  box-sizing: border-box;
+  padding: 20px;
 }
 </style>
 

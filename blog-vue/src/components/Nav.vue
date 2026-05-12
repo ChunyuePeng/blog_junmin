@@ -1,172 +1,179 @@
 <template>
   <div>
     <div
-      v-if="!state.isMobile"
-      class="nav"
+        v-if="!state.isMobile"
+        class="nav"
     >
       <div class="nav-content">
         <el-row :gutter="20">
           <el-col :span="3">
             <router-link to="/">
               <img
-                class="logo"
-                src="../assets/logo.jpg"
-                alt="BiaoChenXuYing"
+                  class="logo"
+                  src="../assets/logo.jpg"
+                  alt="BiaoChenXuYing"
               >
             </router-link>
           </el-col>
           <el-col :span="16">
             <el-menu
-              :router="true"
-              :default-active="state.activeIndex"
-              active-text-color="#409eff"
-              class="el-menu-demo"
-              mode="horizontal"
-              @select="handleSelect"
+                :router="true"
+                :default-active="state.activeIndex"
+                active-text-color="#409eff"
+                class="el-menu-demo"
+                mode="horizontal"
+                @select="handleSelect"
             >
               <el-menuItem
-                :route="l.path"
-                :index="l.index"
-                v-for="l in state.list"
-                :key="l.index"
+                  :route="l.path"
+                  :index="l.index"
+                  v-for="l in state.list"
+                  :key="l.index"
               >
-                {{l.name}}
+                {{ l.name }}
               </el-menuItem>
             </el-menu>
           </el-col>
-          <el-col
-            v-if="userInfo._id"
-            :span="5"
-          >
-            <div class="nav-right">
-              <el-dropdown @command="handleLogout">
-                <span class="el-dropdown-link">
-                  {{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <img
-                  v-if="!userInfo.avatar"
-                  class="user-img"
-                  src="../assets/user.png"
-                  alt="BiaoChenXuYing"
-                >
-                <img
-                  v-if="userInfo.avatar"
-                  class="user-img"
-                  :src="userInfo.avatar"
-                  alt="BiaoChenXuYing"
-                >
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="logout">登 出</el-dropdown-item>
-                </el-dropdown-menu>
+          <div class="nav-right">
+            <div class="flex flex-wrap items-center">
+              <el-dropdown split-button type="primary" @click="handleCreate">
+                创作
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item>Action 1</el-dropdown-item>
+                    <el-dropdown-item>Action 2</el-dropdown-item>
+                    <el-dropdown-item>Action 3</el-dropdown-item>
+                    <el-dropdown-item divided @click="handleLogout">登出</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
               </el-dropdown>
             </div>
-          </el-col>
-          <el-col
-            v-else
-            :span="4"
-          >
-            <div class="nav-right">
-              <el-button
-                size="small"
-                type="primary"
-                @click="handleClick('login')"
-              >登录</el-button>
-              <el-button
-                size="small"
-                type="danger"
-                @click="handleClick('register')"
-              >注册</el-button>
-            </div>
-          </el-col>
+
+
+          </div>
+<!--          <el-col-->
+<!--              v-if="userInfo._id"-->
+<!--              :span="5"-->
+<!--          >-->
+<!--            <div class="nav-right">-->
+<!--              <el-dropdown @command="handleLogout">-->
+<!--                <span class="el-dropdown-link">-->
+<!--                  test<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+<!--                </span>-->
+<!--                <img-->
+<!--                    v-if="!userInfo.avatar"-->
+<!--                    class="user-img"-->
+<!--                    src="../assets/user.png"-->
+<!--                    alt="BiaoChenXuYing"-->
+<!--                >-->
+<!--                <img-->
+<!--                    v-if="userInfo.avatar"-->
+<!--                    class="user-img"-->
+<!--                    :src="userInfo.avatar"-->
+<!--                    alt="BiaoChenXuYing"-->
+<!--                >-->
+<!--                <el-dropdown-menu slot="dropdown">-->
+<!--                  <el-dropdown-item command="logout">登 出</el-dropdown-item>-->
+<!--                </el-dropdown-menu>-->
+<!--              </el-dropdown>-->
+<!--            </div>-->
+<!--          </el-col>-->
+<!--          <el-col-->
+<!--              v-else-->
+<!--              :span="4"-->
+<!--          >-->
+<!--            <div class="nav-right">-->
+<!--              <el-button-->
+<!--                  size="small"-->
+<!--                  type="primary"-->
+<!--                  @click="handleClick('login')"-->
+<!--              >登录-->
+<!--              </el-button>-->
+<!--              <el-button-->
+<!--                  size="small"-->
+<!--                  type="danger"-->
+<!--                  @click="handleClick('register')"-->
+<!--              >注册-->
+<!--              </el-button>-->
+<!--            </div>-->
+<!--          </el-col>-->
         </el-row>
       </div>
     </div>
     <div
-      v-else
-      class="nav"
+        v-else
+        class="nav"
     >
       <div class="nav-mobile">
         <div class="nav-mobile-logo">
           <router-link to="/">
             <img
-              class="logo fl"
-              src="../assets/logo.jpg"
-              alt="BiaoChenXuYing"
+                class="logo fl"
+                src="../assets/logo.jpg"
+                alt="BiaoChenXuYing"
             >
           </router-link>
         </div>
-        <div class="title">{{state.title}}</div>
+        <div class="title">{{ state.title }}</div>
         <div
-          class="menu"
-          @click="handleMenu"
+            class="menu"
+            @click="handleMenu"
         ><i class="el-icon-menu"></i></div>
       </div>
       <div
-        v-if="state.isShow"
-        class="nav-mobile-content"
-        :class="{'enter-slideUp': state.enterSlideUp,'leave-slideDown': state.leaveSlideDown}"
+          v-if="state.isShow"
+          class="nav-mobile-content"
+          :class="{'enter-slideUp': state.enterSlideUp,'leave-slideDown': state.leaveSlideDown}"
       >
         <div class="list">
           <div
-            @click="handleClickMenu('')"
-            class="item"
+              @click="handleClickMenu('')"
+              class="item"
           >
             <router-link to="/">首 页</router-link>
           </div>
           <div
-            @click="handleClickMenu('/articles')"
-            class="item"
+              @click="handleClickMenu('/articles')"
+              class="item"
           >
             <router-link to="/articles">文 章</router-link>
           </div>
           <div
-            @click="handleClickMenu('/archive')"
-            class="item"
-          >
-            <router-link to="/archive">归 档</router-link>
-          </div>
-          <div
-            @click="handleClickMenu('/project')"
-            class="item"
-          >
-            <router-link to="/project">项 目</router-link>
-          </div>
-          <div
-            @click="handleClickMenu('/timeline')"
-            class="item"
+              @click="handleClickMenu('/timeline')"
+              class="item"
           >
             <router-link to="/timeline">历 程</router-link>
           </div>
           <div
-            @click="handleClickMenu('/message')"
-            class="item"
+              @click="handleClickMenu('/message')"
+              class="item"
           >
             <router-link to="/message">留 言</router-link>
           </div>
           <div
-            @click="handleClickMenu('/about')"
-            class="item"
+              @click="handleClickMenu('/about')"
+              class="item"
           >
             <router-link to="/about">关 于</router-link>
           </div>
           <div
-            @click="handleClickMenu('/login')"
-            class="item"
+              @click="handleClickMenu('/login')"
+              class="item"
           >
             <span v-if="userInfo._id">{{ userInfo.name }}</span>
             <span v-else>登 录</span>
           </div>
           <div
-            v-if="!userInfo._id"
-            @click="handleClickMenu('/register')"
-            class="item"
+              v-if="!userInfo._id"
+              @click="handleClickMenu('/register')"
+              class="item"
           >
             注 册
           </div>
           <div
-            v-if="userInfo._id"
-            @click="handleClickMenu('/logout')"
-            class="item"
+              v-if="userInfo._id"
+              @click="handleClickMenu('/logout')"
+              class="item"
           >
             登 出
           </div>
@@ -174,17 +181,17 @@
       </div>
     </div>
     <div
-      v-if="state.isShow"
-      class="mask"
-      :class="{'mask-fade-out': state.leaveSlideDown}"
-      @click="handleHideMenu"
+        v-if="state.isShow"
+        class="mask"
+        :class="{'mask-fade-out': state.leaveSlideDown}"
+        @click="handleHideMenu"
     ></div>
     <RegisterAndLogin
-      :visible="state.visible"
-      :isMobile="state.isMobile"
-      :handleFlag="state.handleFlag"
-      @ok="handleOk"
-      @cancel="handleCancel"
+        :visible="state.visible"
+        :isMobile="state.isMobile"
+        :handleFlag="state.handleFlag"
+        @ok="handleOk"
+        @cancel="handleCancel"
     ></RegisterAndLogin>
   </div>
 </template>
@@ -197,18 +204,23 @@ import {
 } from "vue";
 import service from "../utils/https";
 import urls from "../utils/urls";
-import { useStore } from "vuex";
-import { useRoute, useRouter } from "vue-router";
-import { ElLoading, ElMessage } from "element-plus";
-import { key } from "../store";
-import { isMobileOrPc, getQueryStringByName } from "../utils/utils";
-import { UserInfo, NavListItem } from "../types/index";
+import {useStore} from "vuex";
+import {useRoute, useRouter} from "vue-router";
+import {ElLoading, ElMessage} from "element-plus";
+import {key} from "../store";
+import {isMobileOrPc, getQueryStringByName} from "../utils/utils";
+import {UserInfo, NavListItem} from "../types/index";
+
+import {
+  Plus,
+  ArrowDown,
+} from '@element-plus/icons-vue';
 
 export default defineComponent({
   name: "Nav",
   components: {
     RegisterAndLogin: defineAsyncComponent(
-      () => import("./RegisterAndLogin.vue")
+        () => import("./RegisterAndLogin.vue")
     ),
   },
   computed: {
@@ -265,16 +277,6 @@ export default defineComponent({
           name: "文章",
         },
         {
-          index: "3",
-          path: "/archive",
-          name: "归档",
-        },
-        {
-          index: "4",
-          path: "/project",
-          name: "项目",
-        },
-        {
           index: "5",
           path: "/timeline",
           name: "历程",
@@ -326,15 +328,25 @@ export default defineComponent({
     };
 
     const handleLogout = (): void => {
-      window.sessionStorage.userInfo = "";
-      store.commit("SAVE_USER", {
-        userInfo: {
-          _id: "",
-          name: "",
-          avatar: "",
-        },
+      sessionStorage.removeItem('token')
+      ElMessage({
+        message: "登出成功",
+        type: "success",
       });
     };
+
+    const handleCreate = ():void  => {
+      if (sessionStorage.getItem('token')) {
+        router.push("/addArticle");
+      }else {
+        ElMessage({
+          message: "请先登录",
+          type: "success",
+        });
+        state.handleFlag = "login";
+        state.visible = true;
+      }
+    }
 
     const handleClickMenu = (route?: string): void => {
       state.isShow = false;
@@ -364,9 +376,9 @@ export default defineComponent({
         background: "rgba(255, 255, 255, 0.7)",
       });
       const data: UserInfo = await service.post(
-        urls.getUser,
-        { code },
-        { withCredentials: true }
+          urls.getUser,
+          {code},
+          {withCredentials: true}
       );
       loading.close();
 
@@ -412,7 +424,10 @@ export default defineComponent({
       getUser,
       handleSelect,
       routeChange,
-      handleHideMenu
+      handleHideMenu,
+      Plus,
+      ArrowDown,
+      handleCreate,
     };
   },
 });
@@ -423,31 +438,37 @@ export default defineComponent({
 .nav-mobile {
   display: flex;
   line-height: 60px;
+
   .nav-mobile-logo {
     flex: 1;
     margin-top: 5px;
     margin-left: 10px;
   }
+
   .title {
     flex: 3;
     font-size: 24px;
   }
+
   .menu {
     flex: 1;
     font-size: 34px;
     color: #409eff;
   }
 }
+
 .nav-mobile-content {
   font-size: 0.3rem;
   height: 7.3rem;
   width: 100%;
   background-color: #fff;
+
   .list {
     .item {
       line-height: 0.8rem;
       color: #303133;
       border-bottom: 1px solid #eee;
+
       a {
         display: block;
         width: 100%;
@@ -457,6 +478,7 @@ export default defineComponent({
     }
   }
 }
+
 .nav {
   position: fixed;
   top: 0;
@@ -465,31 +487,38 @@ export default defineComponent({
   width: 100%;
   border-bottom: 1px solid #eee;
   background-color: #fff;
+
   .nav-content {
     width: 1200px;
     margin: 0 auto;
   }
+
   .logo {
     height: 50px;
     margin: 0;
     border-radius: 50%;
     margin-top: 5px;
   }
+
   .el-menu.el-menu--horizontal {
     border-bottom: none;
   }
+
   .el-menu--horizontal > .el-menu-item {
     cursor: pointer;
     color: #333;
   }
+
   .nav-right {
     position: relative;
     padding-top: 15px;
     text-align: right;
+
     .el-dropdown {
       cursor: pointer;
       padding-right: 60px;
     }
+
     .user-img {
       position: absolute;
       top: -15px;
@@ -516,11 +545,13 @@ export default defineComponent({
   z-index: 1001;
   animation: slideUp 0.3s forwards;
 }
+
 .leave-slideDown {
   visibility: visible;
   z-index: 1001;
   animation: slideDown 0.3s forwards;
 }
+
 @keyframes slideUp {
   from {
     transform: translate3d(0, 100%, 0);
@@ -531,6 +562,7 @@ export default defineComponent({
     opacity: 1;
   }
 }
+
 @keyframes slideDown {
   from {
     transform: translate3d(0, 0, 0);
@@ -540,6 +572,7 @@ export default defineComponent({
     opacity: 0;
   }
 }
+
 .mask {
   position: fixed;
   z-index: 100;
@@ -550,9 +583,11 @@ export default defineComponent({
   background-color: #000;
   opacity: 0.5;
 }
+
 .mask-fade-out {
   animation: maskFadeOut 0.4s forwards;
 }
+
 @keyframes maskFadeOut {
   from {
     opacity: 0.5;
@@ -560,5 +595,15 @@ export default defineComponent({
   to {
     opacity: 0;
   }
+}
+
+.example-showcase .el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+.example-showcase .el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
 }
 </style>

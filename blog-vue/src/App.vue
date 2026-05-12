@@ -60,7 +60,6 @@ export default defineComponent({
       const navs = [
         "/articles",
         "/archive",
-        "/archive",
         "/project",
         "/timeline",
         "/message",

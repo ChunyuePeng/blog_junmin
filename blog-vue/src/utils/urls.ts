@@ -12,6 +12,7 @@ export const urls: any = {
   getArticleList: "article-public/list-articles",
   likeArticle: "likeArticle",
   getArticleDetail: "article-public/get-article-detail",
+  addArticle: "article-management/add-article",
 
   addMessage: "addMessage",
   getMessageList: "getMessageList",
