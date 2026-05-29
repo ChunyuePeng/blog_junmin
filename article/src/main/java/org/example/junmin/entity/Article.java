@@ -23,6 +23,15 @@ public class Article {
     private LocalDateTime publishTime;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+    private String keywords;
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
 
     public Long getId() {
         return id;

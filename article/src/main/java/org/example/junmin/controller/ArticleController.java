@@ -6,6 +6,7 @@ import org.example.junmin.dto.RequestDTO;
 import org.example.junmin.service.ArticleManagementService;
 import org.example.junmin.vo.Result;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/article-management/")
@@ -21,5 +22,10 @@ public class ArticleController {
     @PostMapping("list-articles")
     public Result listArticles(@RequestBody RequestDTO<Object,Object> requestDTO) {
         return articleManagementService.listArticles(requestDTO);
+    }
+
+    @PostMapping("upload-image")
+    public Result uploadImage(@RequestParam("file") MultipartFile multipartFile) {
+        return articleManagementService.uploadImage(multipartFile);
     }
 }

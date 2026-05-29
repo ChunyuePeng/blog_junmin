@@ -16,6 +16,23 @@ spring:
     enabled: true
     out-of-order: true
     locations: classpath:db.migration
+  elasticsearch:
+    uris: http://20.1.0.206:9200
+  rabbitmq:
+    host: 20.1.0.206
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: manual
+        trusted-packages: org.example.junmin.comm.dto
+  data:
+    redis:
+      host: 20.1.0.206
+      port: 6379
+      password: waveoss123
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -31,3 +48,7 @@ eureka:
 logging:
   level:
     org.mybatis: DEBUG
+
+blog:
+  hostname: http://localhost:8080
+  image-path: F:\blog-image

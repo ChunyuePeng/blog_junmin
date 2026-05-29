@@ -132,15 +132,15 @@ export default defineComponent({
         /**
          * 这里换成你的后端上传接口
          */
-        const response = await fetch(
-            "http://localhost:3000/upload",
+
+        const data = await service.post(
+            urls.uploadImage,
+            formData,
             {
-              method: "POST",
-              body: formData,
+              needToken:true
             }
         );
 
-        const data = await response.json();
 
         /**
          * 后端返回：
@@ -148,7 +148,7 @@ export default defineComponent({
          *   url: "图片地址"
          * }
          */
-        res.push(data.url);
+        res.push(data);
       }
 
       callback(res);
@@ -175,6 +175,9 @@ export default defineComponent({
             urls.addArticle,
             {
               d:article
+            },
+            {
+              needToken:true
             }
         );
         state.isLoading=false;

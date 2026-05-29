@@ -10,4 +10,6 @@ public interface ArticleService {
     List<Article> getAll();
 
     Article getById(Long id);
+
+    void updateViewCount(Long articleId, Long views);
 }

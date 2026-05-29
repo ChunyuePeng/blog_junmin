@@ -20,7 +20,7 @@ export const urls: any = {
 
   getLinkList: "getLinkList",
 
-  getTagList: "getTagList",
+  getTagList: "article-public/get-tag-list",
 
   getCategoryList: "getCategoryList",
 
@@ -28,7 +28,10 @@ export const urls: any = {
   getTimeAxisDetail: "getTimeAxisDetail",
 
   getProjectList: "getProjectList",
-  getProjectDetail: "getProjectDetail"
+  getProjectDetail: "getProjectDetail",
+  uploadImage: "article-management/upload-image",
+  search:"article-public/search",
+  getHot:"article-public/top10"
 };
 
 export default urls;

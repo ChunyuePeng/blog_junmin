@@ -213,5 +213,5 @@ export interface TagList {
 }
 export interface TagsData {
   count: number;
-  list: TagList | any;
+  data: TagList | any;
 }

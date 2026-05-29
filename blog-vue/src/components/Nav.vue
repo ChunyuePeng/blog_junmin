@@ -5,8 +5,8 @@
         class="nav"
     >
       <div class="nav-content">
-        <el-row :gutter="20">
-          <el-col :span="3">
+        <el-row :gutter="24">
+          <el-col :span="4">
             <router-link to="/">
               <img
                   class="logo"
@@ -15,7 +15,7 @@
               >
             </router-link>
           </el-col>
-          <el-col :span="16">
+          <el-col :span="8">
             <el-menu
                 :router="true"
                 :default-active="state.activeIndex"
@@ -34,70 +34,82 @@
               </el-menuItem>
             </el-menu>
           </el-col>
-          <div class="nav-right">
-            <div class="flex flex-wrap items-center">
-              <el-dropdown split-button type="primary" @click="handleCreate">
-                创作
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>Action 1</el-dropdown-item>
-                    <el-dropdown-item>Action 2</el-dropdown-item>
-                    <el-dropdown-item>Action 3</el-dropdown-item>
-                    <el-dropdown-item divided @click="handleLogout">登出</el-dropdown-item>
-                  </el-dropdown-menu>
+          <el-col :span="8">
+            <div class="search-box">
+              <el-input
+                  v-model="state.keyword"
+                  placeholder="搜文章 / 搜博客 / 搜用户"
+                  clearable
+                  size="large"
+              >
+                <template #prefix>
+                  <el-icon>
+                    <Search/>
+                  </el-icon>
                 </template>
-              </el-dropdown>
+              </el-input>
+
+              <el-button
+                  type="primary"
+                  size="large"
+                  class="search-btn"
+                  @click="handleSearch"
+              >
+                搜索
+              </el-button>
             </div>
-
-
-          </div>
-<!--          <el-col-->
-<!--              v-if="userInfo._id"-->
-<!--              :span="5"-->
-<!--          >-->
-<!--            <div class="nav-right">-->
-<!--              <el-dropdown @command="handleLogout">-->
-<!--                <span class="el-dropdown-link">-->
-<!--                  test<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-<!--                </span>-->
-<!--                <img-->
-<!--                    v-if="!userInfo.avatar"-->
-<!--                    class="user-img"-->
-<!--                    src="../assets/user.png"-->
-<!--                    alt="BiaoChenXuYing"-->
-<!--                >-->
-<!--                <img-->
-<!--                    v-if="userInfo.avatar"-->
-<!--                    class="user-img"-->
-<!--                    :src="userInfo.avatar"-->
-<!--                    alt="BiaoChenXuYing"-->
-<!--                >-->
-<!--                <el-dropdown-menu slot="dropdown">-->
-<!--                  <el-dropdown-item command="logout">登 出</el-dropdown-item>-->
-<!--                </el-dropdown-menu>-->
-<!--              </el-dropdown>-->
-<!--            </div>-->
-<!--          </el-col>-->
-<!--          <el-col-->
-<!--              v-else-->
-<!--              :span="4"-->
-<!--          >-->
-<!--            <div class="nav-right">-->
-<!--              <el-button-->
-<!--                  size="small"-->
-<!--                  type="primary"-->
-<!--                  @click="handleClick('login')"-->
-<!--              >登录-->
-<!--              </el-button>-->
-<!--              <el-button-->
-<!--                  size="small"-->
-<!--                  type="danger"-->
-<!--                  @click="handleClick('register')"-->
-<!--              >注册-->
-<!--              </el-button>-->
-<!--            </div>-->
-<!--          </el-col>-->
+          </el-col>
+          <el-col :span="4">
+            <div class="nav-right">
+              <div class="flex flex-wrap items-center">
+                <el-dropdown split-button type="primary" @click="handleCreate">
+                  创作
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item>Action 1</el-dropdown-item>
+                      <el-dropdown-item>Action 2</el-dropdown-item>
+                      <el-dropdown-item>Action 3</el-dropdown-item>
+                      <el-dropdown-item divided @click="handleLogout">登出</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </div>
+            </div>
+          </el-col>
         </el-row>
+        <el-dialog title="搜索结果" v-model="state.dialogTableVisible" append-to-body>
+          <el-table :data="state.gridData">
+            <el-table-column label="ID" width="100">
+              <template #default="scope">
+                <el-link
+                    type="primary"
+                    :href="state.href + scope.row.id"
+                    target="_blank"
+                >
+                  {{ scope.row.id }}
+                </el-link>
+              </template>
+            </el-table-column>
+            <el-table-column label="内容">
+              <template #default="scope">
+                <div
+                    class="content"
+                    v-html="scope.row.summary"
+                ></div>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+              small
+              layout="prev, pager, next"
+              :total="state.articlePageInfo.total"
+              v-model:current-page="state.articlePageInfo.currentPage"
+              v-model:page-size="state.articlePageInfo.pageSize"
+              @current-change="handleSearch"
+              @size-change="handleSearch"
+          >
+          </el-pagination>
+        </el-dialog>
       </div>
     </div>
     <div
@@ -208,8 +220,10 @@ import {useStore} from "vuex";
 import {useRoute, useRouter} from "vue-router";
 import {ElLoading, ElMessage} from "element-plus";
 import {key} from "../store";
-import {isMobileOrPc, getQueryStringByName} from "../utils/utils";
+import {isMobileOrPc, getQueryStringByName, getBaseUrl} from "../utils/utils";
 import {UserInfo, NavListItem} from "../types/index";
+import {Search} from "@element-plus/icons-vue";
+
 
 import {
   Plus,
@@ -262,6 +276,20 @@ export default defineComponent({
     const store = useStore(key);
     const router = useRouter();
     const state = reactive({
+      href: getBaseUrl()+"/articleDetail?article_id=",
+      articlePageInfo: {
+        currentPage: 1,
+        pageSize: 5,
+        total: 0
+      },
+      keyword: "",
+      gridData: [
+        {
+          name: "test",
+          address: "test"
+        }
+      ],
+      dialogTableVisible: false,
       visible: false,
       handleFlag: "",
       title: "首页",
@@ -298,6 +326,26 @@ export default defineComponent({
       isShow: false,
       isMobile: isMobileOrPc(),
     });
+    const goDetail = () => {
+
+    }
+    const handleSearch = async (): Promise<void> => {
+      state.dialogTableVisible = true
+      const data= await service.post(
+          urls.search,
+          {
+            page:{
+              currentPage:state.articlePageInfo.currentPage,
+              pageSize:state.articlePageInfo.pageSize
+            },
+            q:{
+              keyword:state.keyword
+            }
+          }
+      )
+      state.gridData = data.list
+      state.articlePageInfo.total=data.total
+    };
 
     const routeChange = (val: any, oldVal: any) => {
       for (let i = 0; i < state.list.length; i++) {
@@ -335,10 +383,10 @@ export default defineComponent({
       });
     };
 
-    const handleCreate = ():void  => {
+    const handleCreate = (): void => {
       if (sessionStorage.getItem('token')) {
         router.push("/addArticle");
-      }else {
+      } else {
         ElMessage({
           message: "请先登录",
           type: "success",
@@ -428,6 +476,9 @@ export default defineComponent({
       Plus,
       ArrowDown,
       handleCreate,
+      Search,
+      handleSearch,
+      goDetail
     };
   },
 });
@@ -489,7 +540,7 @@ export default defineComponent({
   background-color: #fff;
 
   .nav-content {
-    width: 1200px;
+    width: 100%;
     margin: 0 auto;
   }
 
@@ -516,7 +567,7 @@ export default defineComponent({
 
     .el-dropdown {
       cursor: pointer;
-      padding-right: 60px;
+      padding-right: 10px;
     }
 
     .user-img {
@@ -600,10 +651,43 @@ export default defineComponent({
 .example-showcase .el-dropdown + .el-dropdown {
   margin-left: 15px;
 }
+
 .example-showcase .el-dropdown-link {
   cursor: pointer;
   color: var(--el-color-primary);
   display: flex;
   align-items: center;
+}
+
+
+.search-box {
+  display: flex;
+  align-items: center;
+  width: 600px;
+  margin: 0 auto;
+
+  :deep(.el-input__wrapper) {
+    height: 46px;
+    border-radius: 24px 0 0 24px;
+    box-shadow: none;
+    border: 1px solid #dcdfe6;
+    border-right: none;
+    padding-left: 15px;
+
+    &:hover {
+      border-color: #409eff;
+    }
+  }
+
+  :deep(.el-input__inner) {
+    font-size: 15px;
+  }
+
+  .search-btn {
+    width: 120px;
+    height: 46px;
+    border-radius: 0 24px 24px 0;
+    font-size: 15px;
+  }
 }
 </style>

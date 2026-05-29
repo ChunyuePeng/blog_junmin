@@ -3,7 +3,12 @@ package org.example.junmin.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
+import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -22,6 +27,7 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth -> oauth.jwt())
                 .build();
     }
+
 
 
 }

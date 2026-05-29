@@ -7,49 +7,33 @@
     >
     <div class="title">夜尽天明</div>
     <div class="right-content">
-      <!-- <div class="item">
-        <div class="num">123</div>粉丝
-      </div>
-      <div class="item">
-        <div class="num">123</div>文章
-      </div>
-      <div class="item">
-        <div class="num">123</div>字数
-      </div>
-      <div class="item">
-        <div class="num">123</div>收获喜欢
-      </div> -->
     </div>
     <div class="tags">
       <div class="title">标签云</div>
       <router-link
         v-for="item in state.list"
         class="item"
-        :key="item._id"
-        :to="`/articles?tag_id=${item._id}&tag_name=${item.name}&category_id=`"
+        :key="item"
+        :to="`/articles?ttag_name=${item}&category_id=`"
       >
-        <span :key="item._id">{{item.name}}</span>
+        <span :key="item">{{item}}</span>
       </router-link>
     </div>
-    <div class="introduce">
-      <div class="title">技术以内的 BB</div>
-      <div class="content">
-        <img
-          style="width:100%;"
-          src="../assets/BiaoChenXuYing.png"
-          alt="全栈修炼"
-        />
-      </div>
-    </div>
-    <div class="introduce">
-      <div class="title">开源项目的 BB</div>
-      <div class="content">
-        <img
-          style="width:100%;"
-          src="../assets/FrontEndGitHub.png"
-          alt="前端GitHub"
-        />
-      </div>
+    <div class="tags">
+      <div class="title">排行榜</div>
+      <el-table
+          :data="state.hotList"
+          style="width: 100%">
+        <el-table-column
+            prop="title"
+            label="名称"
+            width="180">
+        </el-table-column>
+        <el-table-column
+            prop="score"
+            label="热度">
+        </el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
@@ -64,6 +48,7 @@ export default defineComponent({
   name: "CustomSlider",
   setup(props, context) {
     const state = reactive({
+      hotList:[],
       isLoadEnd: false,
       isLoading: false,
       list: [] as Array<any>,
@@ -82,20 +67,27 @@ export default defineComponent({
       });
       state.isLoading = false;
 
-      state.list = [...state.list, ...data.list];
-      state.total = data.count;
-      state.params.pageNum++;
-      if (state.total === state.list.length) {
-        state.isLoadEnd = true;
-      }
+      state.list = [...data];
+      state.isLoadEnd = true;
+      // state.total = data.count;
+      // state.params.pageNum++;
+      // if (state.total === state.list.length) {
+      //   state.isLoadEnd = true;
+      // }
     };
+    const getHot = async (): Promise<void> =>{
+      const data = await service.get(urls.getHot);
+      state.hotList = data
+    }
 
     onMounted(() => {
       handleSearch();
+      getHot();
     });
 
     return {
       state,
+      getHot
     };
   }
 });

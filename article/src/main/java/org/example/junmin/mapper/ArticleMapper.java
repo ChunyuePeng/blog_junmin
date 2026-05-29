@@ -1,6 +1,8 @@
 package org.example.junmin.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import org.example.junmin.entity.Article;
 
 import java.util.List;
@@ -18,5 +20,7 @@ public interface ArticleMapper {
     int updateById(Article article);
 
     int deleteById(Long id);
+    @Update("UPDATE articles SET view_count = #{views} WHERE id = #{id}")
+    int updateViewCount(@Param(value = "id") Long id,@Param(value = "views") Integer views);
 
 }

@@ -27,4 +27,9 @@ public class ArticleServiceImpl implements ArticleService {
     public Article getById(Long id) {
         return articleMapper.selectById(id);
     }
+
+    @Override
+    public void updateViewCount(Long articleId, Long views) {
+        articleMapper.updateViewCount(articleId, Math.toIntExact(views));
+    }
 }

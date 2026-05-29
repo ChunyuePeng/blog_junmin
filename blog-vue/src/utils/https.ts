@@ -29,13 +29,17 @@ if (import.meta.env.MODE === "development") {
 // request 拦截器 axios 的一些配置
 service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    const token = sessionStorage.getItem('token')
-    if (token){
-      config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${token}`
+
+    if (config.needToken === true) {
+      const token = sessionStorage.getItem('token')
+      if (token){
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`
+        }
       }
     }
+
     return config;
   },
   (error: any) => {

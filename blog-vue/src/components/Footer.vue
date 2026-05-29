@@ -1,10 +1,10 @@
 
 <template>
   <div class="footer">
-    <div>全栈修炼 ©2018 Created by BiaoChenXuYing</div>
+    <div>junmin's blog ©2026 Created by chunyue</div>
     <div class="number">
       <a href="http://www.beian.miit.gov.cn" target="_blank"
-        >粤ICP备181415067号</a
+        >pcy_love_wjm</a
       >
     </div>
   </div>
